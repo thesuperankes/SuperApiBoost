@@ -1,0 +1,18 @@
+import { db as mongo } from './mongo';
+import express,{Request,Response} from 'express';
+import cors from 'cors';
+
+import routes from './api/index'
+
+const app = express();
+var db = mongo;
+
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(cors());
+
+app.use('/api',routes);
+
+app.listen(process.env.PORT || 8008, ()=>{
+    console.log("Escuchando en puerto 8008");
+})

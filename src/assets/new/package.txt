@@ -1,0 +1,11 @@
+{
+    "name": "#NAME",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "start": "ts-node src/app.ts",
+        "build": "tsc"
+    },
+    "author": "TSAGames",
+    "license": "ISC"
+}
