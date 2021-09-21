@@ -1,18 +1,15 @@
 import mongoose from 'mongoose';
-import { MongoBasic } from './MongoBasic';
+import { MongoBasic } from './mongoBasic';
+#IMPORTINTERFACE
 
-
-var #CAPINAMESchema = new mongoose.Schema({
-})
+var #CAPINAMESchema = new mongoose.Schema(#SCHEMAGENERATED)
 
 let #LOWERNAMESchema = mongoose.model("#LOWERNAME", #CAPINAMESchema);
 
-interface I#CAPINAME{
-}
 
-export class #CAPINAMEDA extends MongoBasic{
+export class #CAPINAMEController extends MongoBasic{
 
-    constructor(data?:I#CAPINAME){
+    constructor(data?:#INTERNAME){
         super(#LOWERNAMESchema, data)
     };
 

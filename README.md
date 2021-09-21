@@ -32,7 +32,7 @@ This command create a couple of files in the folders:
 
 ```bash
 src/api/databases/[NAME]DA.ts
-src/api/Routes/[NAME]Route.ts
+src/api/routes/[NAME]Route.ts
 #This file has been modify
 src/api/index.ts
 ```

@@ -5,6 +5,7 @@ import cors from 'cors';
 import routes from './api/index'
 
 const app = express();
+const PORT = process.env.PORT || 8080;
 var db = mongo;
 
 app.use(express.json());
@@ -13,6 +14,6 @@ app.use(cors());
 
 app.use('/api',routes);
 
-app.listen(process.env.PORT || 8008, ()=>{
-    console.log("Escuchando en puerto 8008");
+app.listen(PORT, ()=>{
+    console.log(`listen on port: ${PORT}`);
 })

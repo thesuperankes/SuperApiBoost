@@ -1,5 +1,5 @@
 import mongoose, { Model } from "mongoose";
-import { isEmpty } from '../Tools/ValidateType';
+import { isEmpty } from '../tools/validateType';
 
 const responseSuccess = (data?: any) => {
     let response = {};
