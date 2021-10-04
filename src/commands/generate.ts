@@ -2,6 +2,12 @@ import { Command, flags } from "@oclif/command";
 import * as fs from "fs";
 const requireText = require("require-text");
 const logBeauty = require("log-beautify");
+import axios from "axios";
+
+async function getText(url:string){
+  let response = await axios.get(url);
+  return JSON.stringify(response.data);
+}
 
 function capitalize(str: string) {
   const lower = str.toLowerCase();
@@ -13,9 +19,9 @@ function insertAt(index: number, value: string, array: Array<any>) {
   return array;
 }
 
-function generateFiles(name: string, schema = false, array = {}) {
-  const schemaTxt: any = requireText("../assets/generate/schema.txt", require);
-  const routeTxt: any = requireText("../assets/generate/route.txt", require);
+async function generateFiles(name: string, schema = false, array = {}) {
+  const schemaTxt: any = await getText('https://raw.githubusercontent.com/thesuperankes/SuperApiBoost/main/src/assets/generate/schema.txt')
+  const routeTxt: any = await getText('https://raw.githubusercontent.com/thesuperankes/SuperApiBoost/main/src/assets/new/route.txt')
 
   if (schema) generateInterface(name, array);
 
@@ -194,7 +200,7 @@ export default class Generate extends Command {
         const arrayProperties = JSON.parse(
           requireText(flags.file.toString(), require)
         );
-        generateFiles(flags.name, true, arrayProperties);
+        await generateFiles(flags.name, true, arrayProperties);
       } else generateFiles(flags.name);
       logBeauty.info("Modify index with new route.");
       addImportAndUse(flags.name);

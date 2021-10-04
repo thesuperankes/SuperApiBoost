@@ -1,8 +1,11 @@
 import { Command, flags } from "@oclif/command";
 import * as cp from "child_process";
 import * as fs from "fs";
+import Blob from "cross-blob"
+import axios from "axios";
 const logBeauty = require("log-beautify");
-const requireText = require("require-text");
+const uriTxt = 'https://raw.githubusercontent.com/thesuperankes/SuperApiBoost/main/src/assets/new/'
+let nameProject = '';
 
 function intallPackages(name: string) {
   cp.execSync(
@@ -12,91 +15,56 @@ function intallPackages(name: string) {
       stdio: "inherit",
     }
   );
-  logBeauty.warning("Remember add the mongo uri in mongo.ts  !!!!!");
+  logBeauty.warning("Remember add the mongo uri in config.ts  !!!!!");
   logBeauty.success("Installed packages");
-  logBeauty.success("Go to your folder and execute: npm start");
+  logBeauty.success(`Run: cd ${ nameProject } and execute: npm start`);
+}
+
+async function getText(url: string) {
+  let response = await axios.get(url, { responseType: 'arraybuffer' });
+  let buff = Buffer.from(response.data);
+  return buff.toString();
+}
+
+function createDirectory(path:string){
+  logBeauty.info(`Folder ${path} Created`)
+  return (!fs.existsSync(path) && fs.mkdirSync(path, { recursive: true }))
+}
+
+async function createFile(path:string, name:string){
+  let data:any = await getText(uriTxt + name);
+  logBeauty.info(`File ${path} Created`)
+  return (!fs.existsSync(path) && fs.writeFileSync(path,data.replace('#NAME',nameProject)))
 }
 
 async function startProject(name: string) {
   const dir = `./${name}`;
-
   const path = `./${name}/src/`;
+  const dirSrc = `${path}api`;
+  const dirDatabases = `${path}controllers`;
+  const dirTools = `${path}tools`;
+  const dirRoutes = `${path}api/routes`;
+  const dirInterfaces = `${path}interfaces`;
 
-  const dirSrc = `${path}/api`;
-  const dirDatabases = `${path}/controllers`;
-  const dirTools = `${path}/tools`;
-  const dirRoutes = `${path}/api/routes`;
-  const dirInterfaces = `${path}/interfaces`;
+  createDirectory(dir);
+  createDirectory(path);
+  createDirectory(dirSrc);
+  createDirectory(dirInterfaces);
+  createDirectory(dirDatabases);
+  createDirectory(dirTools);
+  createDirectory(dirRoutes);
 
-  const dataPackage: any = requireText("../assets/new/package.txt", require);
-  const dataConfig: any = requireText("../assets/new/config.txt", require);
-  const dataMongo: any = requireText("../assets/new/mongoBasic.txt", require);
-  const dataTSConfig: any = requireText("../assets/new/tsconfig.txt", require);
-  const dataValidate: any = requireText(
-    "../assets/new/validateType.txt",
-    require
-  );
-  const dataApp: any = requireText("../assets/new/app.txt", require);
-  const dataMongoConfig: any = requireText(
-    "../assets/new/mongoConfig.txt",
-    require
-  );
-  const dataIndex: any = requireText("../assets/new/index.txt", require);
+  await createFile(`${path}app.ts`, "app.txt")
+  await createFile(`${path}config.ts`, "config.txt")
+  await createFile(`${path}mongo.ts`, "mongoConfig.txt")
+  await createFile(`${path}api/index.ts`, "index.txt")
+  await createFile(`${path}controllers/mongoBasic.ts`, "mongoBasic.txt")
+  await createFile(`${path}tools/validateType.ts`, "validateType.txt")
+  await createFile( `./${name}/package.json`, "package.txt")
+  await createFile(`./${name}/tsconfig.json`, "tsconfig.txt")
 
-  if (!fs.existsSync(dir)) {
-    //start directory
-    fs.mkdir(dir, () => {
-      //Create src folder and app, mongo files.
-      fs.mkdir(path, () => {
-        fs.writeFile(`${path}/app.ts`, dataApp, () =>
-          logBeauty.debug("Added app.ts")
-        );
-        fs.writeFile(`${path}/config.ts`, dataConfig, () =>
-          logBeauty.debug("Added config.ts")
-        );
-        fs.writeFile(`${path}/mongo.ts`, dataMongoConfig, () =>
-          logBeauty.debug("Added mongo.ts")
-        );
-        fs.writeFile(`${dir}/tsconfig.json`, dataTSConfig, () =>
-          logBeauty.debug("Added tsconfig.json")
-        );
-        //Create api folder
-        fs.mkdir(dirSrc, () => {
-          logBeauty.debug("Api directory created");
-          //Create routes folder
-          fs.mkdir(dirRoutes, () =>
-            logBeauty.debug("Routes directory created")
-          );
-          //Create index
-          fs.writeFileSync(`${path}/api/index.ts`, dataIndex);
-        });
-
-        fs.mkdir(dirInterfaces, () =>
-          logBeauty.debug("Interfaces directory created")
-        );
-        //Create databases (controllers)
-        fs.mkdir(dirDatabases, () => {
-          logBeauty.debug("Controllers directory created");
-          fs.writeFileSync(`${path}/controllers/mongoBasic.ts`, dataMongo);
-        });
-        //Create Tools directory
-        fs.mkdir(dirTools, () => {
-          logBeauty.debug("Tools directory created");
-          fs.writeFileSync(`${path}/tools/validateType.ts`, dataValidate);
-        });
-        //Create package.json and install packages
-        fs.writeFile(
-          `./${name}/package.json`,
-          dataPackage.replace("#NAME", name),
-          () => {
-            logBeauty.debug("Added package.json");
-            logBeauty.debug("Install Packages");
-            intallPackages(name);
-          }
-        );
-      });
-    });
-  }
+  logBeauty.warning(`Installing packages`);
+  intallPackages(name);
 }
 
 export default class New extends Command {
@@ -104,7 +72,6 @@ export default class New extends Command {
 
   static flags = {
     name: flags.string({ char: "n", description: "name to print" }),
-    // flag with no value (-f, --force)
     force: flags.boolean({ char: "f" }),
   };
 
@@ -116,10 +83,11 @@ export default class New extends Command {
     if (flags.name === undefined || flags.name === null) {
       logBeauty.error("ìs necessary a name for create project");
     } else {
+      nameProject = flags.name;
       const dir = `./${flags.name}`;
 
       if (!fs.existsSync(dir)) {
-        logBeauty.debug("Generate project");
+        logBeauty.success("Creating project");
         startProject(flags.name);
       }
     }
