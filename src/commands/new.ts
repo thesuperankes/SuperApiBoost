@@ -13,7 +13,7 @@ function intallPackages(name: string) {
     }
   );
   logBeauty.warning("Remember add the mongo uri in mongo.ts  !!!!!");
-  logBeauty.success("installed packages");
+  logBeauty.success("Installed packages");
   logBeauty.success("Go to your folder and execute: npm start");
 }
 
@@ -29,7 +29,9 @@ async function startProject(name: string) {
   const dirInterfaces = `${path}/interfaces`;
 
   const dataPackage: any = requireText("../assets/new/package.txt", require);
+  const dataConfig: any = requireText("../assets/new/config.txt", require);
   const dataMongo: any = requireText("../assets/new/mongoBasic.txt", require);
+  const dataTSConfig: any = requireText("../assets/new/tsconfig.txt", require);
   const dataValidate: any = requireText(
     "../assets/new/validateType.txt",
     require
@@ -49,26 +51,32 @@ async function startProject(name: string) {
         fs.writeFile(`${path}/app.ts`, dataApp, () =>
           logBeauty.debug("Added app.ts")
         );
+        fs.writeFile(`${path}/config.ts`, dataConfig, () =>
+          logBeauty.debug("Added config.ts")
+        );
         fs.writeFile(`${path}/mongo.ts`, dataMongoConfig, () =>
           logBeauty.debug("Added mongo.ts")
         );
+        fs.writeFile(`${dir}/tsconfig.json`, dataTSConfig, () =>
+          logBeauty.debug("Added tsconfig.json")
+        );
         //Create api folder
         fs.mkdir(dirSrc, () => {
-          logBeauty.debug("api directory created");
+          logBeauty.debug("Api directory created");
           //Create routes folder
           fs.mkdir(dirRoutes, () =>
-            logBeauty.debug("routes directory created")
+            logBeauty.debug("Routes directory created")
           );
           //Create index
           fs.writeFileSync(`${path}/api/index.ts`, dataIndex);
         });
 
         fs.mkdir(dirInterfaces, () =>
-          logBeauty.debug("interfaces directory created")
+          logBeauty.debug("Interfaces directory created")
         );
         //Create databases (controllers)
         fs.mkdir(dirDatabases, () => {
-          logBeauty.debug("controllers directory created");
+          logBeauty.debug("Controllers directory created");
           fs.writeFileSync(`${path}/controllers/mongoBasic.ts`, dataMongo);
         });
         //Create Tools directory
@@ -92,7 +100,7 @@ async function startProject(name: string) {
 }
 
 export default class New extends Command {
-  static description = "describe the command here";
+  static description = "This command start a new project";
 
   static flags = {
     name: flags.string({ char: "n", description: "name to print" }),

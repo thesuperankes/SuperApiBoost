@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+import config from './config';
 
-var MONGODB_URL = "url";
+var MONGODB_URL = config.MONGO;
 
 mongoose.connect(MONGODB_URL).then(() => {
     //don't show the log when it is test

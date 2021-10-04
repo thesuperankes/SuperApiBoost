@@ -1,0 +1,11 @@
+export default {
+    MONGO: process.env.MONGO || 'URI',
+    PORT: process.env.PORT || 8080,
+    MESSAGES: {
+        success:'Success',
+        error: 'Failed',
+        createError: `Can't create record`,
+        updateError: `Can't update record`,
+        delete: `Can't delete record`
+    }
+};

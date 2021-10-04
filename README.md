@@ -1,8 +1,12 @@
 # README
 
-SABO is a client to make project node js typescript faster and easy.
+SABO is a client to make rest api nodejs, typescript, express, mongoose faster and easy.
 
-## Installation
+## Usage & Demo
+
+[Stackblitz Demo](https://stackblitz.com/edit/superapiboost-demo)
+
+## Instalation
 
 Using npm
 
@@ -14,28 +18,106 @@ npm i -g superapiboost
 
 To generate a new project use the command:
 ```bash
-sabo start -n=[NAME]
+sabo new -n=[NAME]
 ```
-When start a new project remember add the mongo uri in the file mongo.ts
+### Folder structure: 
+
+```
+📦API
+ ┣ 📂node_modules
+ ┣ 📂src
+ ┃ ┣ 📂api
+ ┃ ┃ ┣ 📂routes
+ ┃ ┃ ┗ 📜index.ts
+ ┃ ┣ 📂controllers
+ ┃ ┃ ┗ 📜mongoBasic.ts #Basic CRUD Methods
+ ┃ ┣ 📂interfaces
+ ┃ ┣ 📂tools #transversal functions in the project
+ ┃ ┃ ┗ 📜validateType.ts
+ ┃ ┣ 📜app.ts
+ ┃ ┣ 📜config.ts
+ ┃ ┗ 📜mongo.ts
+ ┣ 📜package-lock.json
+ ┣ 📜package.json
+ ┗ 📜tsconfig.json
+```
+
+
+### Config.ts remember add the mongo uri in this file.
 
 ``` typescript
-import mongoose from 'mongoose';
-
-var MONGODB_URL = "[URI]";
+export default {
+    MONGO: process.env.MONGO || 'URI',
+    PORT: process.env.PORT || 8080,
+    MESSAGES: {
+        success:'Success',
+        error: 'Failed',
+        createError: `Can't create record`,
+        updateError: `Can't update record`,
+        delete: `Can't delete record`,
+        
+    }
+};
 ```
 
-To generate new controller and route use:
+### Generate
+
+This command make the route and controller
+
 ```bash
-sabo generate -n=[NAME]
+sabo generate -n=[NAME] -p=[ROUTE]
 ```
-This command create a couple of files in the folders:
+You can generate the interface and mongo schema if you create a json file with the next example structure:
+
+### Structure json.
+
+```json
+{
+  "name":{
+    "type":"string",
+    "required":true,
+    "default":"'Andy'"
+  },
+  "cellphone":{
+    "type":"number",
+    "required":false
+  },
+  "isValid":{
+    "type":"boolean",
+    "required":true,
+    "default":"true"
+  }
+}
+```
+
+and use the flag -p path:
 
 ```bash
-src/api/databases/[NAME]DA.ts
-src/api/routes/[NAME]Route.ts
-#This file has been modify
-src/api/index.ts
+sabo generate -n=User -p="C:/models/user.json"
 ```
+
+### Files Generated
+
+
+```
+📦API
+ ┣ 📂src
+ ┃ ┣ 📂api
+ ┃ ┃ ┣ 📂routes
+ ┃ ┃ ┃ ┗ 📜userRoute.ts
+ ┃ ┃ ┗ 📜index.ts //this file has been modificated
+ ┃ ┣ 📂controllers
+ ┃ ┃ ┗ 📜userController.ts
+ ┃ ┣ 📂interfaces
+ ┃ ┃ ┗ 📂user
+ ┃ ┃ ┃ ┗ 📜IUser.ts
+```
+
+## Run
+```bash
+npm start
+```
+
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

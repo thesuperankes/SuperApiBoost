@@ -1,5 +1,4 @@
 import { Command, flags } from "@oclif/command";
-import { IGenProperties } from "../interfaces/IGenProperties";
 import * as fs from "fs";
 const requireText = require("require-text");
 const logBeauty = require("log-beautify");
@@ -39,10 +38,11 @@ function generateFiles(name: string, schema = false, array = {}) {
       .replace(/#INTERNAME/g, schema ? `I${capitalize(name)}` : "any")
   );
   fs.writeFileSync(
-    `./src/api/routes/${capitalize(name)}Route.ts`,
+    `./src/api/routes/${name.toLowerCase()}Route.ts`,
     routeTxt
       .replace(/#LOWERNAME/g, name.toLowerCase())
       .replace(/#DATAACCESS/g, capitalize(name) + "Controller")
+      .replace(/#NAMECONTROLLER/g, name.toLowerCase() + "Controller")
       .replace(
         /#IMPORTINTERFACE/g,
         schema
@@ -143,7 +143,7 @@ function addImportAndUse(name: string) {
 
   const str = cleanLines.join("\r\n");
   fs.writeFile("./src/api/index.ts", str, () => {
-    logBeauty.success("index has been update correctly");
+    logBeauty.success("Index has been update correctly");
   });
 }
 

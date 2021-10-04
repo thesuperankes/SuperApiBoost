@@ -1,28 +1,28 @@
-import express from 'express';
-import { #DATAACCESS } from '../../controllers/#DATAACCESS';
+import express, { Request, Response} from 'express';
+import { #DATAACCESS } from '../../controllers/#NAMECONTROLLER';
 #IMPORTINTERFACE
 var router = express.Router();
 
-router.post('/', async (req, res) => {
+router.post('/', async (req: Request, res: Response) => {
     const body = #BODY
 
     res.send(await new #DATAACCESS(body).create())
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', async (req: Request, res: Response) => {
     const body = #BODY;
     res.send(await new #DATAACCESS(body).update(req.params.id))
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req: Request, res: Response) => {
     res.send(await new #DATAACCESS().delete(req.params.id))
 });
 
-router.get('/', async (req, res) => {
+router.get('/', async (req: Request, res: Response) => {
     res.send(await new #DATAACCESS().getAll())
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req: Request, res: Response) => {
     res.send(await new #DATAACCESS().getById(req.params.id))
 });
 

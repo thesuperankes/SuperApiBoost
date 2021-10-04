@@ -1,19 +1,20 @@
 import { db as mongo } from './mongo';
-import express,{Request,Response} from 'express';
+import express from 'express';
 import cors from 'cors';
 
-import routes from './api/index'
+import routes from './api/index';
+import config from './config';
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = config.PORT;
 var db = mongo;
 
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors());
 
-app.use('/api',routes);
+app.use('/api', routes);
 
-app.listen(PORT, ()=>{
-    console.log(`listen on port: ${PORT}`);
-})
+app.listen(PORT, () => {
+  console.log(`listen on port: ${PORT}`);
+});

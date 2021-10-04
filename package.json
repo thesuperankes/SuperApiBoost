@@ -1,7 +1,7 @@
 {
   "name": "superapiboost",
   "description": "SuperApiBoost is a tool to generate a express and mongoose api easy and fast.",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "author": "thesuperankes",
   "bin": {
     "sabo": "./bin/run"

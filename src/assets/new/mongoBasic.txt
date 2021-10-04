@@ -1,13 +1,16 @@
+import config from "../config";
 import mongoose, { Model } from "mongoose";
 import { isEmpty } from '../tools/validateType';
 
+
+
 const responseSuccess = (data?: any) => {
     let response = {};
-    !isEmpty(data) ? response = { statusCode: 200, message: 'Operacion terminada con exito.', data } : response = { statusCode: 200, message: 'Operacion terminada con exito.' }
+    !isEmpty(data) ? response = { statusCode: 200, message: config.MESSAGES.success, data } : response = { statusCode: 200, message: config.MESSAGES.success }
     return response;
 }
 const responseError = (err?: any) => {
-    return { statusCode: 201, message: 'Ocurrio un error.', err: err };
+    return { statusCode: 201, message: config.MESSAGES.error, err: err };
 }
 
 export class MongoBasic {
@@ -26,10 +29,10 @@ export class MongoBasic {
                 await result.save();
                 return responseSuccess();
             } else {
-                return responseError("No se pudo crear el registro");
+                return responseError(config.MESSAGES.createError);
             }
         } catch (error) {
-            return responseError("Ocurrio un error en la ejecucion del procedimiento");
+            return responseError(config.MESSAGES.error);
         }
     }
 
@@ -41,10 +44,10 @@ export class MongoBasic {
                 let result = await this.model.findByIdAndUpdate(itemId, Object.assign(original, this.data));
                 return responseSuccess(result);
             } else {
-                return responseError("No se pudo actualizar el registro");
+                return responseError(config.MESSAGES.updateError);
             }
         } catch (error) {
-            return responseError("Ocurrio un error en la ejecucion del procedimiento");
+            return responseError(config.MESSAGES.error);
         }
     }
 
@@ -53,8 +56,7 @@ export class MongoBasic {
             await this.model.findByIdAndRemove(new mongoose.Types.ObjectId(id));
             return responseSuccess();
         } catch (error) {
-            console.log(error)
-            return responseError("Ocurrio un error en la ejecucion del procedimiento");
+            return responseError(config.MESSAGES.error);
         }
     }
 
@@ -63,7 +65,7 @@ export class MongoBasic {
             let response = await this.model.find({});
             return responseSuccess(response);
         } catch (error) {
-            return responseError("Ocurrio un error en la ejecucion del procedimiento");
+            return responseError(config.MESSAGES.error);
         }
     }
 
@@ -72,7 +74,7 @@ export class MongoBasic {
             let response = await this.model.findById(new mongoose.Types.ObjectId(id));
             return responseSuccess(response);
         } catch (error) {
-            return responseError("Ocurrio un error en la ejecucion del procedimiento");
+            return responseError(config.MESSAGES.error);
         }
 
     }
