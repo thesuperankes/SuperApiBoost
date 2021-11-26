@@ -4,8 +4,10 @@ export const enum TypeFiles{
 }
 
 export const enum TypeGenerate{
-    SCHEMA = 1,
-    ROUTE = 2
+    SCHEMA,
+    ROUTE,
+    NOSCHEMA,
+    ROUTESIMPLE
 }
 
 export const enum TypeStart{

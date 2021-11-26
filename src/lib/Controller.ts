@@ -1,5 +1,5 @@
 import { Content } from "./Content";
-import { TypeGenerate } from "./Types";
+import { TypeFiles, TypeGenerate } from "./Types";
 import { Tools } from "./Tools";
 import { File } from "./File";
 
@@ -33,27 +33,28 @@ export class Controller extends File {
     return lines.join("\r\n");
   }
 
+  async generateSimpleSchema() {
+    this.getFileUrl(TypeGenerate.NOSCHEMA);
+    let response = await this.GetContent();
+    this.setContent(response);
+  }
+
   checkProperties() {
     let nameCapitalize = Tools.capitalize(this.name);
     let schema = this.generateSchema(this.properties);
-    let addProperties = false;
-
-    if (!Tools.isObjectEmpty(this.properties)) addProperties = true;
 
     let replaceConfig = [
       {
         key: "#SCHEMAGENERATED",
-        value: addProperties ? schema : ""
+        value: schema,
       },
       {
         key: "#IMPORTINTERFACE",
-        value: addProperties
-          ? `import { I${nameCapitalize} } from '../interfaces/${this.name.toLowerCase()}/I${nameCapitalize}'`
-          : ""
+        value: `import { I${nameCapitalize} } from '../interfaces/${this.name.toLowerCase()}/I${nameCapitalize}'`,
       },
       {
         key: "#INTERNAME",
-        value: addProperties ? `I${nameCapitalize}` : 'any'
+        value: `I${nameCapitalize}`,
       },
     ];
 
@@ -69,7 +70,10 @@ export class Controller extends File {
 
   async createController() {
     await this.buildContentFile();
-    this.checkProperties();
+
+    if (Tools.isObjectEmpty(this.properties)) await this.generateSimpleSchema();
+    else this.checkProperties();
+
     this.replaceData();
     await this.createFile();
   }

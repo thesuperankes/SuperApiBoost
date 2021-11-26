@@ -15,17 +15,22 @@ export class Route extends File {
 
   generateBody(arr: any) {
     let names = "";
-  
+
     for (const name of Object.keys(arr)) {
       if (names == "") names = `'${name}'`;
       else names = `${names} | '${name}'`;
     }
-  
+
     return names;
   }
 
-  replaceData() {
+  async generateSimpleRoute() {
+    this.getFileUrl(TypeGenerate.ROUTESIMPLE);
+    let response = await this.GetContent();
+    this.setContent(response);
+  }
 
+  replaceData() {
     let nameCapitalize = Tools.capitalize(this.name);
     let nameLower = this.name.toLowerCase();
 
@@ -33,19 +38,29 @@ export class Route extends File {
       {
         key: "#LOWERNAME",
         value: nameLower,
-      },{
+      },
+      {
         key: "#DATAACCESS",
-        value: nameCapitalize + 'Controller',
-      },{
+        value: nameCapitalize + "Controller",
+      },
+      {
         key: "#NAMECONTROLLER",
-        value: nameLower + 'Controller',
-      },{
+        value: nameLower + "Controller",
+      },
+      {
         key: "#IMPORTINTERFACE",
-        value: !Tools.isObjectEmpty(this.properties) ? `import { I${nameCapitalize} } from '../../interfaces/${nameLower}/I${nameCapitalize}'` : '',
-      },{
+        value: !Tools.isObjectEmpty(this.properties)
+          ? `import { I${nameCapitalize} } from '../../interfaces/${nameLower}/I${nameCapitalize}'`
+          : "",
+      },
+      {
         key: "#BODY",
-        value: !Tools.isObjectEmpty(this.properties) ? `req.body as Pick<I${nameCapitalize}, ${this.generateBody(this.properties)}>;` : '{}'
-      }
+        value: !Tools.isObjectEmpty(this.properties)
+          ? `req.body as Pick<I${nameCapitalize}, ${this.generateBody(
+              this.properties
+            )}>;`
+          : "{}",
+      },
     ];
 
     this.replaceParameters(replaceConfig);
@@ -53,6 +68,9 @@ export class Route extends File {
 
   async createRoute() {
     await this.buildContentFile();
+
+    if (Tools.isObjectEmpty(this.properties)) await this.generateSimpleRoute();
+
     this.replaceData();
     await this.createFile();
   }

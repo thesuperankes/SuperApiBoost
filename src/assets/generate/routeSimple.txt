@@ -3,8 +3,9 @@ import { #DATAACCESS } from '../../controllers/#NAMECONTROLLER';
 
 var router = express.Router();
 
+//This is only a test route.
 router.get('/', async (req: Request, res: Response) => {
-    res.send( #DATAACCESS.works())
+    res.send(#DATAACCESS.works())
 });
 
 export default router;

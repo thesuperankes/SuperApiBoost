@@ -3,13 +3,13 @@ import { TypeGenerate, TypeStart } from "./Types";
 
 export class Content {
   name: string;
-  url: string;
+  url: string = '';
   path: string;
   content: string = "";
 
   constructor(name: string, type: TypeGenerate | TypeStart) {
     this.name = name;
-    this.url = this.getFileUrl(type);
+    this.getFileUrl(type);
     this.path = this.getPath(type);
   }
 
@@ -23,11 +23,16 @@ export class Content {
     this.content = value;
   }
 
-  getFileUrl(type: TypeGenerate | TypeStart): string {
-    if (type == TypeGenerate.SCHEMA)
-      return "https://raw.githubusercontent.com/thesuperankes/SuperApiBoost/main/src/assets/generate/schema.txt";
-    else if (type == TypeGenerate.ROUTE)
-      return "https://raw.githubusercontent.com/thesuperankes/SuperApiBoost/main/src/assets/generate/route.txt";
+  getFileUrl(type: TypeGenerate | TypeStart) {
+    let url =
+      "https://raw.githubusercontent.com/thesuperankes/SuperApiBoost/main/src/assets/";
+
+    if (type == TypeGenerate.SCHEMA) this.url = url + "generate/schema.txt";
+    else if (type == TypeGenerate.ROUTE) this.url = url + "generate/route.txt";
+    else if (type == TypeGenerate.NOSCHEMA)
+      this.url = url + "generate/noSchema.txt";
+    else if (type == TypeGenerate.ROUTESIMPLE)
+      this.url = url + "generate/routeSimple.txt";
     else return "";
   }
 
