@@ -1,6 +1,6 @@
-import * as fs from "fs";
-import { Content } from "./Content";
-import { TypeGenerate, TypeStart } from "./Types";
+import * as fs from 'fs';
+import { Content } from './Content';
+import { TypeGenerate, TypeStart } from './Types';
 
 export class File extends Content {
   name: string;
@@ -10,7 +10,7 @@ export class File extends Content {
     this.name = name;
   }
 
-  replaceParameters(config: Array<{ key: string, value: string }>) {
+  replaceParameters(config: Array<{ key: string; value: string }>) {
     for (const iterator of config) {
       this.replaceKey(iterator.key, iterator.value);
     }

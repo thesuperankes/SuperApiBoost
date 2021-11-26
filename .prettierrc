@@ -1,0 +1,8 @@
+{
+  "tabWidth": 2,
+  "useTabs": false,
+  "endOfLine": "crlf",
+  "trailingComma": "none",
+  "useEditorConfig":false,
+  "singleQuote":true
+}

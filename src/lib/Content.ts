@@ -1,11 +1,11 @@
-import axios from "axios";
-import { TypeGenerate, TypeStart } from "./Types";
+import axios from 'axios';
+import { TypeGenerate, TypeStart } from './Types';
 
 export class Content {
   name: string;
   url: string = '';
   path: string;
-  content: string = "";
+  content: string = '';
 
   constructor(name: string, type: TypeGenerate | TypeStart) {
     this.name = name;
@@ -14,7 +14,7 @@ export class Content {
   }
 
   async GetContent() {
-    let response = await axios.get(this.url, { responseType: "arraybuffer" });
+    let response = await axios.get(this.url, { responseType: 'arraybuffer' });
     let buff = Buffer.from(response.data);
     return buff.toString();
   }
@@ -25,15 +25,15 @@ export class Content {
 
   getFileUrl(type: TypeGenerate | TypeStart) {
     let url =
-      "https://raw.githubusercontent.com/thesuperankes/SuperApiBoost/main/src/assets/";
+      'https://raw.githubusercontent.com/thesuperankes/SuperApiBoost/main/src/assets/';
 
-    if (type == TypeGenerate.SCHEMA) this.url = url + "generate/schema.txt";
-    else if (type == TypeGenerate.ROUTE) this.url = url + "generate/route.txt";
+    if (type == TypeGenerate.SCHEMA) this.url = url + 'generate/schema.txt';
+    else if (type == TypeGenerate.ROUTE) this.url = url + 'generate/route.txt';
     else if (type == TypeGenerate.NOSCHEMA)
-      this.url = url + "generate/noSchema.txt";
+      this.url = url + 'generate/noSchema.txt';
     else if (type == TypeGenerate.ROUTESIMPLE)
-      this.url = url + "generate/routeSimple.txt";
-    else return "";
+      this.url = url + 'generate/routeSimple.txt';
+    else return '';
   }
 
   getPath(type: TypeGenerate | TypeStart): string {
@@ -43,11 +43,11 @@ export class Content {
       return `./src/controllers/${nameLower}Controller.ts`;
     else if (type == TypeGenerate.ROUTE)
       return `./src/api/routes/${nameLower}Route.ts`;
-    else return "";
+    else return '';
   }
 
   replaceKey(key: string, value: string) {
-    let regex = new RegExp(key, "g");
+    let regex = new RegExp(key, 'g');
     this.content = this.content.replace(regex, value);
   }
 }

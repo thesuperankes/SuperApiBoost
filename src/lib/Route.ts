@@ -1,7 +1,7 @@
-import { Content } from "./Content";
-import { File } from "./File";
-import { Tools } from "./Tools";
-import { TypeGenerate } from "./Types";
+import { Content } from './Content';
+import { File } from './File';
+import { Tools } from './Tools';
+import { TypeGenerate } from './Types';
 
 export class Route extends File {
   name: string;
@@ -14,10 +14,10 @@ export class Route extends File {
   }
 
   generateBody(arr: any) {
-    let names = "";
+    let names = '';
 
     for (const name of Object.keys(arr)) {
-      if (names == "") names = `'${name}'`;
+      if (names == '') names = `'${name}'`;
       else names = `${names} | '${name}'`;
     }
 
@@ -36,31 +36,31 @@ export class Route extends File {
 
     let replaceConfig = [
       {
-        key: "#LOWERNAME",
-        value: nameLower,
+        key: '#LOWERNAME',
+        value: nameLower
       },
       {
-        key: "#DATAACCESS",
-        value: nameCapitalize + "Controller",
+        key: '#DATAACCESS',
+        value: nameCapitalize + 'Controller'
       },
       {
-        key: "#NAMECONTROLLER",
-        value: nameLower + "Controller",
+        key: '#NAMECONTROLLER',
+        value: nameLower + 'Controller'
       },
       {
-        key: "#IMPORTINTERFACE",
+        key: '#IMPORTINTERFACE',
         value: !Tools.isObjectEmpty(this.properties)
           ? `import { I${nameCapitalize} } from '../../interfaces/${nameLower}/I${nameCapitalize}'`
-          : "",
+          : ''
       },
       {
-        key: "#BODY",
+        key: '#BODY',
         value: !Tools.isObjectEmpty(this.properties)
           ? `req.body as Pick<I${nameCapitalize}, ${this.generateBody(
               this.properties
             )}>;`
-          : "{}",
-      },
+          : '{}'
+      }
     ];
 
     this.replaceParameters(replaceConfig);

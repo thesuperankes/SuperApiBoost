@@ -1,12 +1,12 @@
-import * as fs from "fs";
-const requireText = require("require-text");
-const logBeauty = require("log-beautify");
-import { Controller } from "./Controller";
-import { Route } from "./Route";
-import { Tools } from "./Tools";
+import * as fs from 'fs';
+const requireText = require('require-text');
+const logBeauty = require('log-beautify');
+import { Controller } from './Controller';
+import { Route } from './Route';
+import { Tools } from './Tools';
 
 export class GenerateFiles {
-  dir = "./src/api";
+  dir = './src/api';
   name: string;
 
   constructor(name: string) {
@@ -22,14 +22,14 @@ export class GenerateFiles {
     }
     lines.push(`}`);
 
-    let text = lines.join("\r\n");
+    let text = lines.join('\r\n');
     if (!fs.existsSync(directory))
       fs.mkdir(directory, () =>
         fs.writeFile(`${directory}/I${Tools.capitalize(name)}.ts`, text, () =>
-          logBeauty.debug("Interface has been generate correctly")
+          logBeauty.debug('Interface has been generate correctly')
         )
       );
-    else logBeauty.error("Directory and interface has been exists");
+    else logBeauty.error('Directory and interface has been exists');
   }
 
   async generateFilesSchema(properties: any) {
@@ -41,7 +41,7 @@ export class GenerateFiles {
     await controller.createController();
     await route.createRoute();
 
-    logBeauty.success("Files generated correctly");
+    logBeauty.success('Files generated correctly');
   }
 
   async GenerateFiles() {
@@ -56,16 +56,16 @@ export class GenerateFiles {
     const nameLower = this.name.toLowerCase();
 
     const stringIndex = fs
-      .readFileSync("./src/api/index.ts")
+      .readFileSync('./src/api/index.ts')
       .toString()
-      .replace(/\r\n/g, "\n")
-      .split("\n");
+      .replace(/\r\n/g, '\n')
+      .split('\n');
 
     let cleanLines: Array<string> = stringIndex.filter(
-      (i: string) => !(i === "")
+      (i: string) => !(i === '')
     );
 
-    const linesImport = cleanLines.filter((x: string) => x.includes("import"));
+    const linesImport = cleanLines.filter((x: string) => x.includes('import'));
 
     cleanLines = this.insertAt(
       linesImport.length,
@@ -78,15 +78,15 @@ export class GenerateFiles {
       cleanLines
     );
 
-    const routeLine = cleanLines.findIndex((x: any) => x.includes(".Router()"));
+    const routeLine = cleanLines.findIndex((x: any) => x.includes('.Router()'));
 
-    cleanLines = this.insertAt(routeLine, "", cleanLines);
-    cleanLines = this.insertAt(routeLine + 2, "", cleanLines);
-    cleanLines = this.insertAt(cleanLines.length - 1, "", cleanLines);
+    cleanLines = this.insertAt(routeLine, '', cleanLines);
+    cleanLines = this.insertAt(routeLine + 2, '', cleanLines);
+    cleanLines = this.insertAt(cleanLines.length - 1, '', cleanLines);
 
-    const str = cleanLines.join("\r\n");
-    fs.writeFile("./src/api/index.ts", str, () => {
-      logBeauty.success("Index has been update correctly");
+    const str = cleanLines.join('\r\n');
+    fs.writeFile('./src/api/index.ts', str, () => {
+      logBeauty.success('Index has been update correctly');
     });
   }
 
@@ -96,16 +96,15 @@ export class GenerateFiles {
   }
 
   validation(properties?: any) {
-    if (this.checkFileExists()){
-      logBeauty.error("The file with the name " + name + " is already exists");
+    if (this.checkFileExists()) {
+      logBeauty.error('The file with the name ' + name + ' is already exists');
       return false;
     }
-      
 
     if (properties) this.generateFilesSchema(properties);
     else this.GenerateFiles();
 
-    logBeauty.info("Modify index with new route.");
+    logBeauty.info('Modify index with new route.');
     this.addImportAndUse();
   }
 

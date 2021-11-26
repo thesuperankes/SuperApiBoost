@@ -1,12 +1,11 @@
-export class Text{
+export class Text {
+  content: string;
 
-    content:string;
+  constructor(content: string) {
+    this.content = content;
+  }
 
-    constructor(content:string){
-        this.content = content;
-    }
-
-    SetContent(value:string){
-        this.content = value;
-    }
+  SetContent(value: string) {
+    this.content = value;
+  }
 }

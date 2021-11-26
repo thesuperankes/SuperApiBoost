@@ -8,17 +8,17 @@ export class Tools {
 
   static convertStringToType(type: string) {
     switch (type) {
-      case "string":
-        return "String";
-      case "number":
-        return "Number";
-      case "boolean":
-        return "Boolean";
-      case "[]":
-        return "Array";
+      case 'string':
+        return 'String';
+      case 'number':
+        return 'Number';
+      case 'boolean':
+        return 'Boolean';
+      case 'array':
+        return 'Array';
 
       default:
-        return "String";
+        return 'String';
     }
   }
 
@@ -26,7 +26,7 @@ export class Tools {
     var isEmpty = true;
     for (let keys in object) {
       isEmpty = false;
-      break; // exiting since we found that the object is not empty
+      break;
     }
     return isEmpty;
   }
