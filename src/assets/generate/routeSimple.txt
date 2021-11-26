@@ -1,0 +1,10 @@
+import express, { Request, Response} from 'express';
+import { #DATAACCESS } from '../../controllers/#NAMECONTROLLER';
+
+var router = express.Router();
+
+router.get('/', async (req: Request, res: Response) => {
+    res.send( #DATAACCESS.works())
+});
+
+export default router;

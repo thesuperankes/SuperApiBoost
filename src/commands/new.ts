@@ -1,7 +1,6 @@
 import { Command, flags } from "@oclif/command";
 import * as cp from "child_process";
 import * as fs from "fs";
-import Blob from "cross-blob"
 import axios from "axios";
 const logBeauty = require("log-beautify");
 const uriTxt = 'https://raw.githubusercontent.com/thesuperankes/SuperApiBoost/main/src/assets/new/'

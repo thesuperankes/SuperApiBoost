@@ -1,0 +1,13 @@
+
+
+export class #CAPINAMEController extends MongoBasic{
+
+    constructor(){
+        super(#LOWERNAMESchema, data)
+    };
+
+    strict works(): string{
+        return "The controller Works";
+    }
+
+}
