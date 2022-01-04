@@ -1,5 +1,4 @@
-import { Content } from './Content';
-import { TypeFiles, TypeGenerate } from './Types';
+import { TypeGenerate } from './Types';
 import { Tools } from './Tools';
 import { File } from './File';
 

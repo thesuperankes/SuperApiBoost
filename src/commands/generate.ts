@@ -5,23 +5,20 @@ import { GenerateFiles } from '../lib/GenerateFiles';
 import * as inquirer from 'inquirer';
 import cli from 'cli-ux';
 
-function processProperties(list:any) : {} {
-
-  let properties:any = {};
+function processProperties(list: any): {} {
+  let properties: any = {};
 
   for (const property of list) {
-
     let item = {
-      "type": property.type,
-      "required": property.required
-    }
+      type: property.type,
+      required: property.required
+    };
 
-    properties[property.name] = item
+    properties[property.name] = item;
   }
 
   console.log(properties);
   return properties;
-
 }
 
 async function generateProperties() {
@@ -37,7 +34,12 @@ async function generateProperties() {
         name: 'type',
         message: 'Choose a type',
         type: 'list',
-        choices: [{ name: 'string' }, { name: 'number' }, { name: 'boolean' }, { name: 'array' }]
+        choices: [
+          { name: 'string' },
+          { name: 'number' },
+          { name: 'boolean' },
+          { name: 'array' }
+        ]
       },
       {
         name: 'required',
@@ -48,7 +50,7 @@ async function generateProperties() {
     ]);
 
     property.type = type;
-    property.required = (required == 'Yes') ? true : false
+    property.required = required == 'Yes' ? true : false;
 
     propertiesList.push(property);
 
@@ -89,8 +91,13 @@ export default class Generate extends Command {
     let path = flags.file == undefined || flags.file == null ? '' : flags.file;
     let properties = {};
 
-    while (!name || name == '') {
+    if(name == '')
       name = await cli.prompt('Write a name for the controller');
+
+    let generate = new GenerateFiles(name);
+    if (generate.checkFileExists()) {
+      logBeauty.error('The file with the name ' + name + ' is already exists');
+      return false;
     }
 
     let responses: any = await inquirer.prompt([
@@ -103,8 +110,6 @@ export default class Generate extends Command {
     ]);
 
     if (responses.path == 'No') properties = await generateProperties();
-
-    let generate = new GenerateFiles(name);
 
     if (path != '') {
       properties = JSON.parse(requireText(path.toString(), require));

@@ -96,19 +96,14 @@ export class GenerateFiles {
   }
 
   validation(properties?: any) {
-    if (this.checkFileExists()) {
-      logBeauty.error('The file with the name ' + name + ' is already exists');
-      return false;
-    }
-
-    if (properties) this.generateFilesSchema(properties);
+    if (!Tools.isObjectEmpty(properties)) this.generateFilesSchema(properties);
     else this.GenerateFiles();
 
     logBeauty.info('Modify index with new route.');
     this.addImportAndUse();
   }
 
-  private checkFileExists() {
+  checkFileExists() {
     let controllerPath = `./src/controllers/${this.name.toLocaleLowerCase()}Controller.ts`;
     let routePath = `./src/api/routes/${this.name.toLowerCase()}Route.ts`;
 

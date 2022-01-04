@@ -6,6 +6,7 @@ const logBeauty = require('log-beautify');
 const uriTxt =
   'https://raw.githubusercontent.com/thesuperankes/SuperApiBoost/main/src/assets/new/';
 let nameProject = '';
+import cli from 'cli-ux';
 
 function intallPackages(name: string) {
   cp.execSync(
@@ -17,7 +18,7 @@ function intallPackages(name: string) {
   );
   logBeauty.warning('Remember add the mongo uri in config.ts  !!!!!');
   logBeauty.success('Installed packages');
-  logBeauty.success(`Run: cd ${nameProject} and execute: npm start`);
+  logBeauty.success(`Run: cd ./${nameProject} and execute: npm start`);
 }
 
 async function getText(url: string) {
@@ -83,16 +84,15 @@ export default class New extends Command {
   async run() {
     const { flags } = this.parse(New);
 
-    if (flags.name === undefined || flags.name === null) {
-      logBeauty.error('ìs necessary a name for create project');
-    } else {
-      nameProject = flags.name;
-      const dir = `./${flags.name}`;
+    let name = flags.name == undefined || flags.name == null ? '' : flags.name;
 
-      if (!fs.existsSync(dir)) {
-        logBeauty.success('Creating project');
-        startProject(flags.name);
-      }
+    if (name == '') name = await cli.prompt('Write a name for the project');
+
+    const dir = `./${name}`;
+
+    if (!fs.existsSync(dir)) {
+      logBeauty.success('Creating project');
+      startProject(name);
     }
   }
 }
